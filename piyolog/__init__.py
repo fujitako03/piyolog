@@ -12,5 +12,5 @@ def read_log(
     Returns:
         Piyolog: Preprocessed Piyolog data
     """
-    piyo = Piyolog()
+    piyo = Piyolog(data_path=data)
     return piyo
