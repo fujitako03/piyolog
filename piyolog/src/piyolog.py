@@ -9,10 +9,11 @@ class Piyolog:
         data_path
     ):
         self.data_path = Path(data_path)
+        self.raw_data = self._read_files(self.data_path)
 
     @staticmethod
     def _read_files(
         data_path: Path
-    ) -> List[str]:
-        return [d.read_text() for d in data_path.iterdir()] 
+    ) -> str:
+        return "\n".join([d.read_text() for d in data_path.iterdir()])
 

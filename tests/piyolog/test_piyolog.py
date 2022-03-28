@@ -13,7 +13,7 @@ def test_version():
 def test_read_log():
     """ピヨログデータを読み込む正常テスト
     """
-    data = "./test_data"
+    data = "./tests/test_data"
     piyo = read_log(data=data)
     assert type(piyo) is Piyolog
 
@@ -23,6 +23,5 @@ def test__read_files():
     """
     data = "./tests/test_data"
     piyo = Piyolog(data_path=data)
-    data_list = piyo._read_files(piyo.data_path)
     
-    assert data_list[0][:13] == "【ぴよログ】2022年3月"
+    assert piyo.raw_data[:13] == "【ぴよログ】2022年3月"
