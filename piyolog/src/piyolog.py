@@ -9,7 +9,7 @@ class Piyolog:
         data_path
     ):
         self.data_path = Path(data_path)
-        self.raw_data = self._read_files(self.data_path)
+        self.raw_text = self._read_files(self.data_path)
 
     @staticmethod
     def _read_files(
