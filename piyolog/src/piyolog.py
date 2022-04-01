@@ -3,6 +3,15 @@ import re
 from pathlib import Path
 from typing import List
 
+from .events import (
+    Poop,
+    Pee,
+    BresastMilk,
+    Milk,
+    Bath,
+    BodyTemperature
+)
+
 class Piyolog:
     def __init__(
         self,
@@ -10,7 +19,7 @@ class Piyolog:
     ):
         self.data_path = Path(data_path)
         self.raw_text = self._read_files(self.data_path)
-        self.split_raw_text = self._split_by_date(raw_text)
+        self.split_raw_text = self._split_by_date()
         self.baby_name = None
         self.baby_birth = None
         self.events = None
