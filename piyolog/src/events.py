@@ -1,5 +1,11 @@
+from abc import ABCMeta, abstractmethod
+# TODO 各eventクラスは重複するため、抽象クラスを作る
 
-class Poop:
+class Event(metaclass=ABCMeta):
+    pass
+    
+
+class Poop(Event):
     def __init__(
         self
     ):
@@ -9,7 +15,7 @@ class Poop:
         self.hardness = None
         self.memo = None
 
-class Pee:
+class Pee(Event):
     def __init__(
         self
     ):
@@ -17,7 +23,7 @@ class Pee:
         self.evet_datetime = None
         self.memo = None
 
-class BresastMilk:
+class BresastMilk(Event):
     def __init__(
         self
     ):
@@ -29,7 +35,7 @@ class BresastMilk:
         self.amount = None
         self.memo = None
 
-class Milk:
+class Milk(Event):
     def __init__(
         self
     ):
@@ -38,7 +44,7 @@ class Milk:
         self.amount = None
         self.memo = None
 
-class Bath:
+class Bath(Event):
     def __init__(
         self
     ):
@@ -46,7 +52,7 @@ class Bath:
         self.evet_datetime = None
         self.memo = None
 
-class BodyTemperature:
+class BodyTemperature(Event):
     def __init__(
         self
     ):
@@ -54,4 +60,5 @@ class BodyTemperature:
         self.evet_datetime = None
         self.temperature = None
         self.memo = None
+
 
