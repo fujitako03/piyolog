@@ -1,6 +1,7 @@
 import os
 import re
 from pathlib import Path
+from pandas import DataFrame
 from typing import List
 
 from .events import (
@@ -23,6 +24,27 @@ class Piyolog:
         self.baby_name = None
         self.baby_birth = None
         self.events = None
+
+    def get_events(
+        self,
+        event:str =None
+    ) -> DataFrame:
+        """指定したイベントのログをデータフレーム形式で出力する
+
+        Args:
+            event (str, optional): イベント名. Defaults to None.
+
+        Returns:
+            DataFrame: 指定したイベントのログをまとめたデータフレーム
+        """
+        if event is None:
+            # Return all events
+            df = DataFrame()
+            return df
+        else:
+            # Return specified events
+            df = DataFrame()
+            return df
 
     @staticmethod
     def _read_files(
