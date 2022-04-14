@@ -1,16 +1,16 @@
 import os
-import re
 from pathlib import Path
 from pandas import DataFrame
 from typing import List
 
+from .preprocess import PrepRawData
+
 from .events import (
     Poop,
-    Pee,
-    BresastMilk,
+    BresastFooding,
     Milk,
-    Bath,
-    BodyTemperature
+    BodyTemperature,
+    Height,
 )
 
 class Piyolog:
@@ -19,11 +19,14 @@ class Piyolog:
         data_path
     ):
         self.data_path = Path(data_path)
-        self.raw_text = self._read_files(self.data_path)
-        self.split_raw_text = self._split_by_date()
-        self.baby_name = None
-        self.baby_birth = None
-        self.events = None
+        self._raw_text = self._read_files(self.data_path)
+        
+        # 前処理
+        prep = PrepRawData(raw_text = self._raw_text)
+        prep.preprocess()
+        self.events = prep.events
+        self.baby_name = prep.baby_name
+        self.baby_birth = prep.baby_birth
 
     def get_events(
         self,
@@ -32,7 +35,7 @@ class Piyolog:
         """指定したイベントのログをデータフレーム形式で出力する
 
         Args:
-            event (str, optional): イベント名. Defaults to None.
+           event (str, optional): イベント名. Defaults to None.
 
         Returns:
             DataFrame: 指定したイベントのログをまとめたデータフレーム
@@ -51,16 +54,8 @@ class Piyolog:
         data_path: Path
     ) -> str:
         return "\n".join([d.read_text() for d in data_path.iterdir()])
-    
-    def _split_by_date(self):
-        split_text = "----------"
-        return self.raw_text.split(split_text)
 
-    def _get_name(self) -> str:
-        pattern = r'(.+)\([0-9]+歳[0-9]+か月[0-9]+日\)'
-        name = re.search(pattern, self.raw_text)
-        name.group()
-    
+
 if __name__=="__main__":
     piyo = Piyolog(
         data_path ="../../tests/test_data"
