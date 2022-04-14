@@ -1,5 +1,4 @@
 import datetime
-from typing import str, int
 
 class Event:
     def __init__(
@@ -9,9 +8,10 @@ class Event:
         memo:str=None 
     ):
         self.name_ja = name_ja
-        self.evet_datetime = event_datetime
+        self.event_datetime = event_datetime
         self.memo = memo
 
+    # TODO プライベート関数に変更
     def check_name_ja(self, except_name_ja) -> None:
         """イベント名が正しいかチェックし、間違っていた場合にエラー
 
@@ -20,6 +20,8 @@ class Event:
         """
         if self.name_ja != except_name_ja:
             ValueError(f'The class excepted {except_name_ja} but got {self.name_ja}')
+    
+    # TODO: clean関数を追加
 
 
 class Poop(Event):
@@ -29,7 +31,7 @@ class Poop(Event):
         event_datetime :datetime.datetime,
         amount: str,
         hardness: str,
-        memo:str=None,
+        memo:str=None, # TODO フォーマット修正
     ):
         super().__init__(
             name_ja,
