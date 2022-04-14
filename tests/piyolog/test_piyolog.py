@@ -42,4 +42,4 @@ def test__read_files():
     data = "./tests/test_data"
     piyo = Piyolog(data_path=data)
     
-    assert piyo.raw_text[:13] == "【ぴよログ】2022年3月"
+    assert piyo._raw_text[:13] == "【ぴよログ】2022年3月"
