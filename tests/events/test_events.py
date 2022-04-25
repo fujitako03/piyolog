@@ -4,32 +4,23 @@ import pytest
 from piyolog import __version__
 from piyolog.src.events import (
     Event,
-    Poop,
-    BresastFooding,
-    Milk,    
-    BodyTemperature,
-    Height,
-    Weight,
-    Chest,
-    BreastMilk,
-    Drink,
-    Vaccination,
-    Milking,
-    Walking,
 )
 
 
-@pytest.mark.parametrize('memo', [
-    (None),
-    ("サンプルのメモです"),
+@pytest.mark.parametrize('description, amount_ml, memo', [
+    ("60ml", 60, ""),
+    ("460ml   吐き戻し多め", 460, "吐き戻し多め"),
 ])
-def test_event(memo):
-    name_ja = 'お風呂'
+def test_event_milk(description, amount_ml, memo):
+    name = 'ミルク'
     event_datetime = datetime.datetime.now()
+    
     event = Event(
-        name_ja=name_ja,
+        name=name,
         event_datetime=event_datetime,
-        memo=memo
-        )
-    assert type(event) is Event
+        description=description
+       )
+
+    assert event.amount_ml == amount_ml
+    assert event.memo == memo
 
