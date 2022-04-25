@@ -9,12 +9,11 @@ class PrepRawData:
         raw_text
     ) -> None:
         self.raw_text = raw_text
-        self.events = None
     
     def preprocess(self):
         # 全体の属性取得
-        self.baby_name = self._get_baby_name()
-        self.baby_birth = self._get_birth()
+        self._baby_name = self._get_baby_name()
+        self._baby_birth = self._get_birth()
 
         # 日別に分割し、日別の属性を取得
         self.days_prepared = self._split_all_into_day()
@@ -23,7 +22,19 @@ class PrepRawData:
         self.events_prepared = self._split_day_into_event()
         
         # イベント種類ごとに前処理を実施
-        self.events = self._preprocess_by_event()
+        self._events = self._preprocess_by_event()
+
+    @property 
+    def events(self):
+        return self._events
+    
+    @property
+    def baby_name(self):
+        return self._baby_name
+    
+    @property
+    def baby_birth(self):
+        return self._baby_birth
     
     def _get_baby_name(self) -> str:
         """生データから子供の名前を取得する
