@@ -3,236 +3,72 @@ import datetime
 class Event:
     def __init__(
         self,
-        name_ja :str,
+        name :str,
         event_datetime :datetime.datetime,
-        memo:str=None 
+        description :str
     ):
-        self.name_ja = name_ja
+        self.name = name
         self.event_datetime = event_datetime
-        self.memo = memo
+        self.description = description
 
-    # TODO プライベート関数に変更
-    def check_name_ja(self, except_name_ja) -> None:
-        """イベント名が正しいかチェックし、間違っていた場合にエラー
-
-        Args:
-            except_name_ja (str): 正しいイベント名
-        """
-        if self.name_ja != except_name_ja:
-            ValueError(f'The class excepted {except_name_ja} but got {self.name_ja}')
+        # 前処理
+        self._preprocess()
     
-    # TODO: clean関数を追加
+    def _preprocess(self):
+        if self.name == "うんち":
+            self._preprocess_poo()
+        elif self.name == "おしっこ":
+            self._preprocess_pee()
+        elif self.name == "ミルク":
+            self._preprocess_milk()
+        elif self.name == "母乳":
+            self._preprocess_breast_fooding()
+        elif self.name == "搾母乳":
+            self._preprocess_breast_milk()
+        elif self.name == "起きる":
+            self._preprocess_sleep()
+        elif self.name == "身長":
+            self._preprocess_height()
+        elif self.name == "体重":
+            self._preprocess_weight()
+        else:
+            pass
+    
+    def _preprocess_poo(self):
+        self.amount = ""
+        self.hardness = ""
+        self.memo = ""
+        
+    def _preprocess_pee(self):
+        self.amount = ""
+        self.memo = ""
 
+    def _preprocess_milk(self):
+        self.amount_ml = 0
+        self.memo = ""
 
-class Poop(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount: str,
-        hardness: str,
-        memo:str=None, # TODO フォーマット修正
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-        self.hardness = hardness
+    def _preprocess_breast_fooding(self):
+        self.amount_ml = 0
+        self.left_minutes = 0
+        self.right_minutes = 0
+        self.sum_minutes = 0
+        self.side_order = []
+        self.memo = ""
+    
+    def _preprocess_breast_milk(self):
+        self.amount_ml = 0
+        self.memo = ""
 
-        # check values
-        self.check_name_ja('うんち')
+    def _preprocess_sleep(self):
+        self.sleeping_minuites = 0
+        self.fall_asleep_datetime = datetime.datetime.now()
+        self.wakeup_datetime = datetime.datetime.now()
+        self.memo = ""
 
-class BresastFooding(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        left_minutes : int,
-        right_minutes: int,
-        order: str,
-        amount : int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.left_minutes = left_minutes
-        self.right_minutes = right_minutes
-        self.order = order
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('母乳')
-
-class Milk(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount : int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('ミルク')
-
-class BodyTemperature(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        temperature : float,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.temperature = temperature
-
-        # check values
-        self.check_name_ja('体温')
-
-class Height(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        height : float,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.height = height
-
-        # check values
-        self.check_name_ja('身長')
-
-class Weight(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        weight : float,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.weight = weight
-
-        # check values
-        self.check_name_ja('体重')
-
-class Chest(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        measurement : float,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.measurement = measurement
-
-        # check values
-        self.check_name_ja('胸囲')
-
-class BreastMilk(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount :int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('搾母乳')
-
-class Drink(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount :int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('のみもの')
-
-class Vaccination(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        vaccine :str,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.vaccine = vaccine
-
-        # check values
-        self.check_name_ja('予防接種')
-
-class Milking(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount :int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('搾乳')
-
-class Walking(Event):
-    def __init__(
-        self,
-        name_ja :str,
-        event_datetime :datetime.datetime,
-        amount :int,
-        memo:str=None 
-    ):
-        super().__init__(
-            name_ja,
-            event_datetime,
-            memo)
-        self.amount = amount
-
-        # check values
-        self.check_name_ja('さんぽ')
-
+    def _preprocess_height(self):
+        self.height_cm = 0
+        self.memo = ""
+        
+    def _preprocess_weight(self):
+        self.weight_cm = 0
+        self.memo = ""

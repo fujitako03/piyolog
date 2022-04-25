@@ -5,13 +5,7 @@ from typing import List
 
 from .preprocess import PrepRawData
 
-from .events import (
-    Poop,
-    BresastFooding,
-    Milk,
-    BodyTemperature,
-    Height,
-)
+from .events import Event
 
 class Piyolog:
     def __init__(
