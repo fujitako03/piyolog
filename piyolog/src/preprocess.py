@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import re
-from datetime import date, datetime
+import datetime
+from dateutil.relativedelta import relativedelta
 
 class PrepRawData:
     def __init__(
@@ -44,20 +45,45 @@ class PrepRawData:
         """
         pattern = r'(\S+)\s+\([0-9]+歳[0-9]+か月[0-9]+日\)'
         match = re.search(pattern, self.raw_text)
-        name = match.group(1)
-        return name
+        try:
+            name = match.group(1)
+            return name
+        except:
+            return ""
         
 
-    def _get_birth(self) -> date:
+    def _get_birth(self) -> datetime.date:
         """生データから誕生日を取得する
 
         Returns:
             date: 誕生日
         
         Rases:
-            誕生日が1950年以降である（不正な値ではない）
+            誕生日が1950年以前
         """
-        pass
+        # 記録日の情報をパース
+        pattern_today = r'(\d{4}\/\d+\/\d+)'
+        match_today = re.search(pattern_today, self.raw_text)
+        str_today = match_today.group(1)
+        date_today = datetime.datetime.strptime(str_today, "%Y/%m/%d").date()
+
+        # 生後日数の情報をパース
+        pattern_age = r'\((\d+)歳(\d+)か月(\d+)日\)'
+        match_age = re.search(pattern_age, self.raw_text)
+        age_year  = int(match_age.group(1))
+        age_month  = int(match_age.group(2))
+        age_days  = int(match_age.group(3))
+        
+        # 演算して誕生日を求める（注:日付から計算しないと結果が変わる）
+        birth_day = date_today - \
+            relativedelta(days=age_days) - \
+            relativedelta(months=age_month) - \
+            relativedelta(years=age_year)
+
+        if birth_day < datetime.date(1950, 1, 1):
+            raise ValueError("誕生日が1950年よりも前です。値を確認してください")
+        
+        return date_today - relativedelta(days=age_days) - relativedelta(months=age_month) - relativedelta(years=age_year)
 
     def _split_all_into_day(self) -> list[tuple]:
         """全体を日別に分割し、日別の属性を返す
@@ -71,7 +97,7 @@ class PrepRawData:
     @staticmethod
     def _get_date(
         day_text: str
-    ) -> date:
+    ) -> datetime.date:
         """日付ごとのテキストから日付を取得する
 
         Args:
@@ -109,7 +135,7 @@ class PrepRawData:
         # 行ごとにループを回し、時間、
         tuple_lines = []
         for line in text_lines:
-            self._split_time_info(line, date)
+            self._split_time_info(line, datetime.date)
             tuple_line = ('date', 'datetime', 'birth_days', 'event_text')
             tuple_lines.append(tuple_line)
         
@@ -118,13 +144,13 @@ class PrepRawData:
     @staticmethod
     def _split_time_info(
         line_text: str,
-        date: date,
+        date: datetime.date,
     ) -> tuple[datetime, str, str]:
         """行ごとに分割したテキストと日付から、イベント情報を抽出したタプルを作成する
 
         Args:
             line_text (str): 行ごとに分割したテキスト
-            date (date): 行に対応する日付
+            date (datetime.date): 行に対応する日付
 
         Returns:
             tuple[datetime, str, str]: 取り出した情報のタプル（日時、イベント名、イベントテキスト）

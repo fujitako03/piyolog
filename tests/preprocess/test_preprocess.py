@@ -74,3 +74,5 @@ def test_baby_birth(raw_text, birth):
     )
     prep.preprocess()
     assert prep.baby_birth == birth
+
+# TODO 1950年よりも前の時のエラーを追加
