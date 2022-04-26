@@ -42,9 +42,11 @@ class PrepRawData:
         Returns:
             str: 子供の名前
         """
-        pattern = r'(.+)\([0-9]+歳[0-9]+か月[0-9]+日\)'
-        name = re.search(pattern, self.raw_text)
-        name.group()
+        pattern = r'(\S+)\s+\([0-9]+歳[0-9]+か月[0-9]+日\)'
+        match = re.search(pattern, self.raw_text)
+        name = match.group(1)
+        return name
+        
 
     def _get_birth(self) -> date:
         """生データから誕生日を取得する
