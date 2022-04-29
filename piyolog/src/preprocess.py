@@ -15,6 +15,9 @@ class PrepRawData:
         # 全体の属性取得
         self._baby_name = self._get_baby_name()
         self._baby_birth = self._get_birth()
+        
+        # 不要な箇所を除去
+        self._raw_text_cleaned =  self._remove_without_logs()
 
         # 日別に分割し、日別の属性を取得
         self.days_prepared = self._split_all_into_day()
@@ -84,13 +87,43 @@ class PrepRawData:
             raise ValueError("誕生日が1950年よりも前です。値を確認してください")
         
         return date_today - relativedelta(days=age_days) - relativedelta(months=age_month) - relativedelta(years=age_year)
+    
+    def _remove_without_logs(self) -> str:
+        """生データからログ以外の不要な箇所を除去する
+
+        Returns:
+            str: 不要な箇所を除去したテキスト
+        """
+        # 正規表現パターンの定義
+        pattern_line = r"\-+" # 区切り線
+        pattern_date = r"\d{4}/\d+/\d+\(\S\)" # 日付
+        pattern_log = r"\d{2}:\d{2}.+" # ログ
+        pattern_concat = "|".join([
+            pattern_line,
+            pattern_date,
+            pattern_log,
+        ])
+
+        # 1.行ごとに分割
+        split_rows = self.raw_text.split('\n')
+
+        # 2.条件に当てはまらないものは除く
+        use_rows = [
+            row
+            for row
+            in split_rows
+            if re.match(pattern_concat, row)
+        ]
+
+        # 結合して返す
+        return "\n".join(use_rows)
 
     def _split_all_into_day(self) -> list[tuple]:
         """全体を日別に分割し、日別の属性を返す
 
         Returns:
-            list[tuple]: 日別の属性リスト
-        """
+        list[tuple]: 日別の属性リスト
+    """
         split_text = "----------"
         return self.raw_text.split(split_text)
 
