@@ -20,7 +20,7 @@ class PrepRawData:
         self._raw_text_cleaned =  self._remove_without_logs()
 
         # 日別に分割し、日別の属性を取得
-        self.days_args = self._split_all_into_day()
+        self.day_texts = self._split_all_into_day()
         
         # イベント別に分割し、イベント別の属性を取得
         self.events_prepared = self._split_day_into_event()
@@ -116,16 +116,22 @@ class PrepRawData:
         ]
 
         # 結合して返す
-        return "\n".join(use_rows)
+        return "\n".join(use_rows) + "\n"
 
-    def _split_all_into_day(self) -> list[tuple]:
-        """全体を日別に分割し、日別の属性を返す
+    def _split_all_into_day(self) -> list[str]:
+        """全体を日別に分割し、日別のテキストを返す
 
-        Returns:
-        list[tuple]: 日別の属性リスト
+        Return:
+        list[str]: 日別の属性リスト
     """
-        split_text = "----------"
-        return self.raw_text.split(split_text)
+        split_text = "----------\n"
+        cleaned_text = [
+            text 
+            for text 
+            in self._raw_text_cleaned.split(split_text) 
+            if not text in ("", "\n")]
+        
+        return cleaned_text
 
     @staticmethod
     def _get_date(
