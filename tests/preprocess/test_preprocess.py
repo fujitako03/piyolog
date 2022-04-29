@@ -119,7 +119,7 @@ def test_baby_birth(raw_text, birth):
 2022/3/2(水)
 01:40 寝る
 23:10 おしっこ
-""")
+----------""")
 ])
 def test_remove_without_logs(raw_text, cleaned_text):
     prep = PrepRawData(
