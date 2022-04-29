@@ -161,15 +161,14 @@ def test_remove_without_logs(raw_text, cleaned_text):
 
 ----------
 """,
-    [
-        {
-            "date":datetime.date(2022,3,1),
-            "logs":["00:05 寝る", "23:55 うんち"],
-        },
-        {
-            "date":datetime.date(2022,3,2),
-            "logs":["01:40 寝る", "23:10 おしっこ"],
-        },
+  [
+"""2022/3/1(火)
+00:05 寝る
+23:55 うんち"""
+,
+"""2022/3/2(水)
+01:40 寝る
+23:10 おしっこ"""
     ])
 ])
 def test_split_all_into_day(raw_text, day_texts):
@@ -177,4 +176,15 @@ def test_split_all_into_day(raw_text, day_texts):
         raw_text=raw_text
     )
     prep.preprocess()
-    assert prep.days_args == day_texts
+    assert prep.day_texts == day_texts
+
+    # [
+    #     {
+    #         "date":datetime.date(2022,3,1),
+    #         "logs":["00:05 寝る", "23:55 うんち"],
+    #     },
+    #     {
+    #         "date":datetime.date(2022,3,2),
+    #         "logs":["01:40 寝る", "23:10 おしっこ"],
+    #     },
+    # ])
