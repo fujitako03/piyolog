@@ -20,7 +20,7 @@ class PrepRawData:
         self._raw_text_cleaned =  self._remove_without_logs()
 
         # 日別に分割し、日別の属性を取得
-        self.days_prepared = self._split_all_into_day()
+        self.days_args = self._split_all_into_day()
         
         # イベント別に分割し、イベント別の属性を取得
         self.events_prepared = self._split_day_into_event()

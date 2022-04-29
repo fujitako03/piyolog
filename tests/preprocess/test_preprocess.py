@@ -127,3 +127,54 @@ def test_remove_without_logs(raw_text, cleaned_text):
     )
     prep.preprocess()
     assert prep._raw_text_cleaned == cleaned_text
+
+
+@pytest.mark.parametrize('raw_text, day_texts', [
+    ("""【ぴよログ】2022年3月
+
+----------
+2022/3/1(火)
+ベビー (0歳0か月11日)
+
+00:05 寝る
+23:55 うんち
+
+母乳合計　　 左 28分 / 右 29分
+ミルク合計　 5回 110ml
+搾母乳合計 1回 60ml
+睡眠合計　　 13時間55分
+おしっこ合計 13回
+うんち合計　 8回
+
+----------
+2022/3/2(水)
+ベビー (0歳0か月12日)
+
+01:40 寝る
+23:10 おしっこ
+
+母乳合計　　 左 33分 / 右 26分
+ミルク合計　 4回 120ml
+睡眠合計　　 15時間10分
+おしっこ合計 11回
+うんち合計　 6回
+
+----------
+""",
+    [
+        {
+            "date":datetime.date(2022,3,1),
+            "logs":["00:05 寝る", "23:55 うんち"],
+        },
+        {
+            "date":datetime.date(2022,3,2),
+            "logs":["01:40 寝る", "23:10 おしっこ"],
+        },
+    ])
+])
+def test_split_all_into_day(raw_text, day_texts):
+    prep = PrepRawData(
+        raw_text=raw_text
+    )
+    prep.preprocess()
+    assert prep.days_args == day_texts
