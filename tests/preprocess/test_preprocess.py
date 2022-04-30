@@ -179,7 +179,7 @@ def test_split_all_into_day(raw_text, day_texts):
         raw_text=raw_text
     )
     prep.preprocess()
-    assert prep.day_texts == day_texts
+    assert prep._day_texts == day_texts
 
 @pytest.mark.parametrize('day_texts, day_attributes', [
   ([
@@ -198,7 +198,7 @@ def test_split_all_into_day(raw_text, day_texts):
       {
           "date": datetime.date(2022,3,1),
           "age_days": 11,
-          "log_text": """"00:05 寝る
+          "log_text": """00:05 寝る
 23:55 うんち
 """
       },
@@ -229,5 +229,5 @@ def test_get_day_attributes(day_texts, day_attributes):
     )
     prep._day_texts = day_texts
     prep._baby_birth = datetime.date(2022,2,18)
-    prep._get_day_attributes()
+    prep._day_attributes = prep._get_day_attributes()
     assert prep._day_attributes == day_attributes
