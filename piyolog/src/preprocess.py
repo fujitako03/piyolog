@@ -19,11 +19,14 @@ class PrepRawData:
         # 不要な箇所を除去
         self._raw_text_cleaned =  self._remove_without_logs()
 
-        # 日別に分割し、日別の属性を取得
-        self.day_texts = self._split_all_into_day()
+        # 日別に分割する
+        self._day_texts = self._split_all_into_day()
+        
+        # 日別の属性を取得
+        self._day_attributes = self._get_day_attributes()
         
         # イベント別に分割し、イベント別の属性を取得
-        self.events_prepared = self._split_day_into_event()
+        self._events_prepared = self._split_day_into_event()
         
         # イベント種類ごとに前処理を実施
         self._events = self._preprocess_by_event()
@@ -132,33 +135,30 @@ class PrepRawData:
             if not text in ("", "\n")]
         
         return cleaned_text
-
-    @staticmethod
-    def _get_date(
-        day_text: str
-    ) -> datetime.date:
-        """日付ごとのテキストから日付を取得する
-
-        Args:
-            day_text (str): 日付ごとに分割したテキスト
-
-        Returns:
-            date: ログの日付
-        """
-        pass
     
-    def _get_birth_days(
-        day: date
-    ) -> int:
-        """日付ごとのテキストから、誕生からの日数を計算する
-
-        Args:
-            day_text (str): 日付ごとに分割したテキスト
+    def _get_day_attributes(self) -> list[dict]:
+        """日別のテキストから、日別の属性を返す
 
         Returns:
-            int: 生後日数（誕生初日は0）
+            list[dict]: _description_
         """
-        pass
+        list_attributes = []
+        for day_text in self._day_texts:
+            # 日付を抽出
+            pattern_date = r"\d{4}/\d+/\d+"
+            m = re.match(pattern_date, day_text)
+            log_date = datetime.datetime.strptime(m.group(), "%Y/%m/%d").date()
+            
+            # logを抽出
+            pattern_log_text = r"\d{4}/\d+/\d+\(\S\)\n"
+            log_text = re.sub(pattern_log_text, "", day_text) # 日付部分を削除
+
+            list_attributes.append({
+                "date": log_date,
+                "age_days": (log_date - self.baby_birth).days,
+                "log_text": log_text,
+            })
+        return list_attributes
 
     def _split_day_into_event(
         self
