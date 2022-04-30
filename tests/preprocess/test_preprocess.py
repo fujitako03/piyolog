@@ -181,13 +181,53 @@ def test_split_all_into_day(raw_text, day_texts):
     prep.preprocess()
     assert prep.day_texts == day_texts
 
-    # [
-    #     {
-    #         "date":datetime.date(2022,3,1),
-    #         "logs":["00:05 寝る", "23:55 うんち"],
-    #     },
-    #     {
-    #         "date":datetime.date(2022,3,2),
-    #         "logs":["01:40 寝る", "23:10 おしっこ"],
-    #     },
-    # ])
+@pytest.mark.parametrize('day_texts, day_attributes', [
+  ([
+"""2022/3/1(火)
+00:05 寝る
+23:55 うんち
+"""
+,
+"""2022/3/2(水)
+01:40 寝る
+23:10 おしっこ
+"""
+    ]
+,
+  [
+      {
+          "date": datetime.date(2022,3,1),
+          "age_days": 11,
+          "log_text": """"00:05 寝る
+23:55 うんち
+"""
+      },
+      {
+          "date": datetime.date(2022,3,2),
+          "age_days": 12,
+          "log_text": """01:40 寝る
+23:10 おしっこ
+"""
+      },
+    ])
+])
+def test_get_day_attributes(day_texts, day_attributes):
+    raw_text = """【ぴよログ】2022年3月
+
+----------
+2022/3/1(火)
+ベビー (0歳0か月11日)
+
+00:05 寝る
+23:55 うんち
+
+睡眠合計　　 13時間55分
+うんち合計　 8回
+"""
+    prep = PrepRawData(
+        raw_text=raw_text
+    )
+    prep._day_texts = day_texts
+    prep._baby_birth = datetime.date(2022,2,18)
+    prep._get_day_attributes()
+    assert prep._day_attributes == day_attributes
