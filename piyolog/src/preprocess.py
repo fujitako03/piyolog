@@ -166,35 +166,68 @@ class PrepRawData:
         """日付ごとのテキストをイベント単位に分割する
 
         Returns:
-            list: イベント単位のリスト
+            list[dict]: イベント単位のリスト
         """
-        # 日付ごとのテキストを行ごとに分割
-        text_lines = []
+        # 日付ごとのテキストをイベント単位の行ごとに分割
+        event_lines = []
+        for day in self._day_attributes:
+            events_info = [
+                {"date": day.get("date"),
+                "age_days": day.get("age_days"),
+                "event_all_text": text
+                } 
+            for text
+            in day.get("log_text").split("\n")
+            if text != ""] # 最後の改行以降は除く
+            event_lines.extend(events_info)
 
-        # 行ごとにループを回し、時間、
-        tuple_lines = []
-        for line in text_lines:
-            self._split_time_info(line, datetime.date)
-            tuple_line = ('date', 'datetime', 'birth_days', 'event_text')
-            tuple_lines.append(tuple_line)
+        # 行ごとにループを回し、前処理する
+        event_attributes_list = []
+        for line in event_lines:
+            event_datetime = self._get_event_datetime(date=line.get("date"), text=line.get("event_all_text"))
+            event_name, event_text = self._split_event_name_text(text=line.get("event_all_text"))
+            
+            event_attributes_list.append(
+                {"datetime": event_datetime,
+                "age_days":line.get("age_days"),
+                "event_name": event_name,
+                "event_text": event_text})
         
-        return tuple_lines
-    
+        return event_attributes_list
+   
     @staticmethod
-    def _split_time_info(
-        line_text: str,
+    def _get_event_datetime(
         date: datetime.date,
-    ) -> tuple[datetime, str, str]:
+        text: str,
+    ) -> datetime:
         """行ごとに分割したテキストと日付から、イベント情報を抽出したタプルを作成する
 
         Args:
-            line_text (str): 行ごとに分割したテキスト
             date (datetime.date): 行に対応する日付
+            text (str): 行ごとに分割したテキスト
 
         Returns:
-            tuple[datetime, str, str]: 取り出した情報のタプル（日時、イベント名、イベントテキスト）
+            event_datetime: イベント日時
         """
-        pass
+        time_str = text.split(" ")[0]
+        print(time_str)
+        time_datetime = datetime.datetime.strptime(time_str, "%H:%M")
+        return datetime.datetime(date.year, date.month, date.day, time_datetime.hour, time_datetime.minute)
+
+    @staticmethod
+    def _split_event_name_text(
+        text: str,
+    ) -> str:
+        """行ごとに分割したテキストを、イベント名と説明テキストに分割する
+
+        Args:
+            text (str): 行ごとに分割したテキスト
+
+        Returns:
+            str, str: イベント名、イベントテキスト
+        """
+        split_text = text.split(" ")
+        return split_text[1], " ".join(split_text[2:])
 
     def _preprocess_by_event(
         self
