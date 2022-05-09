@@ -238,14 +238,14 @@ def test_get_day_attributes(day_texts, day_attributes):
       {
           "date": datetime.date(2022,3,1),
           "age_days": 11,
-          "log_text": """00:05 寝る
-23:55 うんち
+          "log_text": """07:00 母乳 左 3分 → 右 6分
+14:10 うんち (ちょこっと)
 """
       },
       {
           "date": datetime.date(2022,3,2),
           "age_days": 12,
-          "log_text": """01:40 寝る
+          "log_text": """00:05 ミルク 100ml
 23:10 おしっこ
 """
       },
@@ -253,24 +253,28 @@ def test_get_day_attributes(day_texts, day_attributes):
 ,
    [
       {
-          "datetime": datetime.datetime(2022, 3, 1, 0, 5, 0),
+          "datetime": datetime.datetime(2022, 3, 1, 7, 0, 0),
           "age_days": 11,
-          "log_text": "母乳 左 6分 → 右 10分"
+          "event_name": "母乳",
+          "event_text": "左 3分 → 右 6分"
       },
       {
-          "datetime": datetime.datetime(2022, 3, 1, 23, 55, 0),
+          "datetime": datetime.datetime(2022, 3, 1, 14, 10, 0),
           "age_days": 11,
-          "log_text": "うんち (ちょこっと)"
+          "event_name": "うんち",
+          "event_text": "(ちょこっと)"
       },
       {
-          "datetime": datetime.datetime(2022, 3, 2, 1, 40, 0),
+          "datetime": datetime.datetime(2022, 3, 2, 0, 5, 0),
           "age_days": 12,
-          "log_text": "ミルク 100ml"
+          "event_name": "ミルク",
+          "event_text": "100ml"
       },
       {
-          "date": datetime.datetime(2022, 3, 2, 23, 10, 0),
+          "datetime": datetime.datetime(2022, 3, 2, 23, 10, 0),
           "age_days": 12,
-          "log_text": "おしっこ"
+          "event_name": "おしっこ",
+          "event_text": ""
       },
     ])
 ])
