@@ -231,3 +231,65 @@ def test_get_day_attributes(day_texts, day_attributes):
     prep._baby_birth = datetime.date(2022,2,18)
     prep._day_attributes = prep._get_day_attributes()
     assert prep._day_attributes == day_attributes
+
+
+@pytest.mark.parametrize('day_attributes, events_prepared', [
+  ([
+      {
+          "date": datetime.date(2022,3,1),
+          "age_days": 11,
+          "log_text": """00:05 寝る
+23:55 うんち
+"""
+      },
+      {
+          "date": datetime.date(2022,3,2),
+          "age_days": 12,
+          "log_text": """01:40 寝る
+23:10 おしっこ
+"""
+      },
+    ]
+,
+   [
+      {
+          "date": datetime.datetime(2022, 3, 1, 0, 5, 0),
+          "age_days": 11,
+          "log_text": "母乳 左 6分 → 右 10分"
+      },
+      {
+          "date": datetime.datetime(2022, 3, 1, 23, 55, 0),
+          "age_days": 11,
+          "log_text": "うんち (ちょこっと)"
+      },
+      {
+          "date": datetime.datetime(2022, 3, 2, 1, 40, 0),
+          "age_days": 12,
+          "log_text": "ミルク 100ml"
+      },
+      {
+          "date": datetime.datetime(2022, 3, 2, 23, 10, 0),
+          "age_days": 12,
+          "log_text": "おしっこ"
+      },
+    ])
+])
+def test__split_day_into_event(day_attributes, events_prepared):
+    raw_text = """【ぴよログ】2022年3月
+
+----------
+2022/3/1(火)
+ベビー (0歳0か月11日)
+
+00:05 寝る
+23:55 うんち
+
+睡眠合計　　 13時間55分
+うんち合計　 8回
+"""
+    prep = PrepRawData(
+        raw_text=raw_text
+    )
+    prep._day_attributes = day_attributes
+    prep._events_prepared = prep._split_day_into_event()
+    assert prep._events_prepared == events_prepared
