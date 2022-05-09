@@ -253,17 +253,17 @@ def test_get_day_attributes(day_texts, day_attributes):
 ,
    [
       {
-          "date": datetime.datetime(2022, 3, 1, 0, 5, 0),
+          "datetime": datetime.datetime(2022, 3, 1, 0, 5, 0),
           "age_days": 11,
           "log_text": "母乳 左 6分 → 右 10分"
       },
       {
-          "date": datetime.datetime(2022, 3, 1, 23, 55, 0),
+          "datetime": datetime.datetime(2022, 3, 1, 23, 55, 0),
           "age_days": 11,
           "log_text": "うんち (ちょこっと)"
       },
       {
-          "date": datetime.datetime(2022, 3, 2, 1, 40, 0),
+          "datetime": datetime.datetime(2022, 3, 2, 1, 40, 0),
           "age_days": 12,
           "log_text": "ミルク 100ml"
       },
