@@ -210,7 +210,6 @@ class PrepRawData:
             event_datetime: イベント日時
         """
         time_str = text.split(" ")[0]
-        print(time_str)
         time_datetime = datetime.datetime.strptime(time_str, "%H:%M")
         return datetime.datetime(date.year, date.month, date.day, time_datetime.hour, time_datetime.minute)
 
