@@ -1,10 +1,10 @@
-from piyolog import __version__
+from piyolog_prep import __version__
 
 from pathlib import Path
 from pandas import DataFrame
 
-from piyolog import read_log
-from piyolog.src.piyolog import Piyolog
+from piyolog_prep import read_log
+from piyolog_prep.src.piyolog import Piyolog
 
 
 def test_version():

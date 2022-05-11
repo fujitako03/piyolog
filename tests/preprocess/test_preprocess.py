@@ -1,8 +1,8 @@
 import pytest
 import datetime
 
-from piyolog import __version__
-from piyolog.src.preprocess import PrepRawData
+from piyolog_prep import __version__
+from piyolog_prep.src.preprocess import PrepRawData
 
 @pytest.mark.parametrize('raw_text, name', [
     ("""【ぴよログ】2022年3月

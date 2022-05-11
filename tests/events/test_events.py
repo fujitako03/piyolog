@@ -1,8 +1,8 @@
 import datetime
 import pytest
 
-from piyolog import __version__
-from piyolog.src.events import (
+from piyolog_prep import __version__
+from piyolog_prep.src.events import (
     Event,
 )
 
